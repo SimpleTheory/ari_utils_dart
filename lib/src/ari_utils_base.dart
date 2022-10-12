@@ -15,26 +15,22 @@ Iterable<int> range(int stop, {int? start, int? step}) sync* {
     yield i;
   }
 }
-class EnumListItem<T>{
-  int index;
-  T value;
-  EnumListItem(this.index, this.value);
-  int get i => index;
-  T get v => value;
-}
 
-class Zip<I1, I2> extends DelegatingList<ZipItem<I1 ,I2>> {
+
+class Zip<I1, I2> extends DelegatingList<ZipItem<I1 ,I2>>{
   final List<ZipItem<I1,I2>> _base;
   Zip(this._base) : super(_base);
 
-  void addItem(I1 i1, I2 i2){
-    _base.add(ZipItem(i1, i2));
+  void addItem(I1 item1, I2 item2){
+    _base.add(ZipItem(item1, item2));
   }
   Zip<I1, I2> extendItems(List<I1> a, List<I2> b){
     return Zip.create(item1List+a, item2List+b);
   }
-  List<I1> get item1List => _base.map((e) => e[0]).toList() as List<I1>;
-  List<I2> get item2List => _base.map((e) => e[1]).toList() as List<I2>;
+
+  List<I1> get item1List => _base.map<I1>((e) => e[0]).toList();
+  List<I2> get item2List => _base.map<I2>((e) => e[1]).toList();
+
   factory Zip.create(List<I1> a, List<I2> b){
     if (a.length == b.length){
       List<ZipItem<I1, I2>> baseList = [];
@@ -45,8 +41,38 @@ class Zip<I1, I2> extends DelegatingList<ZipItem<I1 ,I2>> {
     }
     throw ArgumentError('Length A != Length B\n${a.length} != ${b.length}');
   }
+  factory Zip.fromEvenList(List list){
+    if (list.length % 2 != 0)
+    {throw ArgumentError('List must be even current at ${list.length}');}
+    List<ZipItem<I1, I2>> newBaseList = [];
+    for (EnumListItem enumItem in enumerateList(list)){
+      if (enumItem.i + 1 > list.length) {break;}
+      else if(enumItem.i % 2 == 1){continue;}
+      else{
+        newBaseList.add(ZipItem(enumItem.value, list[enumItem.index+1]));
+      }
+    }
+    return Zip(newBaseList);
+  }
+  factory Zip.fromMap(Map map_){
+    List<ZipItem<I1, I2>> newBaseList = [];
+    map_.forEach((key, value) {newBaseList.add(ZipItem(key, value));});
+    return Zip(newBaseList);
+  }
+  Zip<I2, I1> swapAll(){
+    return Zip(_base.map((e) => e.swap()).toList());
+  }
 
-//<editor-fold desc="Data Methods">
+
+  bool containsValue(Object? element) {
+    for (ZipItem<I1, I2> item in _base){
+      if (item.item1==element){return true;}
+      if (item.item2==element){return true;}
+    }
+    return false;
+  }
+
+  //<editor-fold desc="Data Methods">
 
   @override
   bool operator ==(Object other) =>
@@ -60,7 +86,7 @@ class Zip<I1, I2> extends DelegatingList<ZipItem<I1 ,I2>> {
 
   @override
   String toString() {
-    return 'Zip{' + ' _base: $_base,' + '}';
+    return 'Zip{_base: $_base}';
   }
 
   Zip copyWith({List<ZipItem<I1, I2>>? base}) => Zip(base ?? _base,);
@@ -82,8 +108,8 @@ class Zip<I1, I2> extends DelegatingList<ZipItem<I1 ,I2>> {
   }
 
   String toJson()=> jsonEncode(_base.map((e) => e.toMap()).toList());
-
 //</editor-fold>
+
 }
 class ZipItem<I1, I2>{
   I1 item1;
@@ -100,8 +126,11 @@ class ZipItem<I1, I2>{
     if (index==1){item2=newVal;}
     throw RangeError('$index is out of range (only 1 and 2)');
   }
+  ZipItem<I2, I1> swap(){
+    return ZipItem(item2, item1);
+  }
 
-//<editor-fold desc="Data Methods">
+  //<editor-fold desc="Data Methods">
 
   @override
   bool operator ==(Object other) =>
@@ -129,13 +158,35 @@ class ZipItem<I1, I2>{
       'item2': item2,
     };
   }
-
+  List toList()=> [item1, item2];
+  factory ZipItem.fromList(List list){
+    if (list.length != 2)
+    {throw ArgumentError('To create ZipItem list must be size two');}
+    return ZipItem(list[0], list[1]);
+  }
   factory ZipItem.fromMap(Map<String, dynamic> map) {
     return ZipItem(map['item1'] as I1, map['item2'] as I2,);
   }
 
 //</editor-fold>
 }
+
+
+Iterable<EnumListItem<T>> enumerateList<T>(List<T> list) sync* {
+  int i = 0;
+  for (T v in list){
+    yield EnumListItem<T>(i, v);
+    i++;
+  }
+}
+class EnumListItem<T>{
+  int index;
+  T value;
+  EnumListItem(this.index, this.value);
+  int get i => index;
+  T get v => value;
+}
+
 // class EnumMapItem<K, V>{
 //   K key;
 //   V value;
@@ -143,13 +194,6 @@ class ZipItem<I1, I2>{
 //   K get k=>key;
 //   V get v=>value;
 // }
-Iterable<EnumListItem<T>> enumerateList<T>(List<T> _list) sync* {
-  int i = 0;
-  for (T v in _list){
-    yield EnumListItem<T>(i, v);
-    i++;
-  }
-}
 // Iterable<EnumMapItem<K, V>> enumerateMap<K, V>(Map<K, V> inputtedMap){
 //   List<EnumMapItem<K, V>> uwu = [];
 //   inputtedMap.forEach((key, value) {uwu.add(EnumMapItem(key, value));});

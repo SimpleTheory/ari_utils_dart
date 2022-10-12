@@ -11,4 +11,4 @@ pubspec.lock
 
 # Random files
 test/trying_things.dart
-.idea
+/.idea/
