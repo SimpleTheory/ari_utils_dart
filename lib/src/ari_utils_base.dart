@@ -1,22 +1,88 @@
-// TODO: Put public facing types in this file.
 import 'dart:convert';
 import 'package:ari_utils/ari_utils.dart';
 import 'package:collection/collection.dart';
 
-extension NumIsInt on num {bool get isInt => (this % 1) == 0;}
-extension NumIsDouble on num {bool get isDouble => !isInt;}
-extension NumIsPositive on num {bool get isPositive => this > 0;}
+extension NumIs on num {
+///Checks if num is int
+  bool get isInt => (this % 1) == 0;
+///Checks if num is decimal
+  bool get isDouble => !isInt;
+///Checks if a number > 0
+  bool get isPositive => this > 0;}
 
+extension PythonicListMethods<E> on List<E> {
+  ///Returns a list slice from given list with all indeces contained within the
+  ///given range. By default start=0, stop=list.length, step=1. Invalid inputs
+  ///are met with ArgumentErrors.
+  List<E> slice({int? stop, int? start, int? step}){
+    //Defaults
+    stop ??= length;
+    start ??= 0;
+    step ??= 1;
+
+    //Clean Up Index (Negative and invalid start/stops)
+    while(start!<0){start+=length;}
+    while(stop!<0){stop+=length;}
+    if (start>length||stop>length)
+    {throw ArgumentError('Either stop $stop or start $start is greater than the '
+        'length of this list $this | length: $length');}
+
+    //Create new list and add things from range into the list
+    List<E> newList = [];
+    for (int i in range(stop, start: start, step: step)){
+      newList.add(this[i]);
+    }
+    return newList;
+  }
+}
+
+///Returns a reversed shallow copy of input list
 List<T> reverse<T>(List<T> x) => List<T>.from(x.reversed);
+
+///Returns a list of two sublists:
+/// 1. All items before specified index
+/// 2. All items after specified index
+List<List<E>> splitBeforeIndex<E>(List<E> og_list, int index){
+  while (index<0){index += og_list.length;}
+  List<List<E>> newList = [[],[]];
+  for (int i in range(og_list.length)){
+    if (i>=index){newList[1].add(og_list[i]);}
+    else {newList[0].add(og_list[i]);}
+  }
+  return newList;
+}
+
+///Similar to python range function iterates from start up to yet not including
+///stop, incrementing by every step.
+///Ex:
+///for (int i in range(5, start: 1, step: 2)
+///   {print(i);}
+///>>> 1
+///>>> 3
 Iterable<int> range(int stop, {int? start, int? step}) sync* {
   step ??= 1;
   start ??= 0;
+  if (step==0){throw ArgumentError('Step is 0, can\'t iterate');}
+  if (stop==start){throw ArgumentError('Start $start is == stop $stop');}
+  else if (stop>start && step.isNegative){throw ArgumentError('Start $start is >'
+      ' than stop $stop, yet step $step is positive');}
+  else if (stop<start && step.isPositive){throw ArgumentError('Start $start is <'
+      ' than stop $stop, yet step $step is negative');}
+
   for (int i = start; i < stop; i+=step){
     yield i;
   }
 }
 
-
+///Zip is a list class with added functionality that pairs two equal matching
+///lists, iterators, sets, etc and combines the elements of the two lists at
+///into a compound ZipItem that contains both of those elements. The added
+///functionality is related to things therein such as:
+///   swap all elements,
+///   go from zip to map,
+///   check if an element is container
+///   within any of the pairs,
+///   etc
 class Zip<I1, I2> extends DelegatingList<ZipItem<I1 ,I2>>{
   final List<ZipItem<I1,I2>> _base;
   Zip(this._base) : super(_base);
@@ -111,21 +177,29 @@ class Zip<I1, I2> extends DelegatingList<ZipItem<I1 ,I2>>{
 //</editor-fold>
 
 }
+
+///Data class for a pair belonging to a zip with some functionality including:
+/// swapping, ==, to & From type constructors, [] operations.
 class ZipItem<I1, I2>{
   I1 item1;
   I2 item2;
 
   ZipItem(this.item1, this.item2);
+  ///[0] retrieves first item [1] retrieves 2nd, negative numbers retrieve
+  /// [0] if even or [1] if odd
   operator [](int index){
     if (index==0){return item1;}
-    if (index==1){return item2;}
+    else if (index==1){return item2;}
+    else if(index<0){return this[(index % 2)];}
     throw RangeError('$index is out of range (only 1 and 2)');
   }
   operator []= (int index, newVal){
     if (index==0){item1=newVal;}
-    if (index==1){item2=newVal;}
+    else if (index==1){item2=newVal;}
+    else if (index<0){this[(index % 2)]=newVal;}
     throw RangeError('$index is out of range (only 1 and 2)');
   }
+  ///Returns shallow copy with item1 & item2 swapped
   ZipItem<I2, I1> swap(){
     return ZipItem(item2, item1);
   }
@@ -145,7 +219,7 @@ class ZipItem<I1, I2>{
 
   @override
   String toString() {
-    return 'ZipItem{ item1: $item1, item2: $item2,}';
+    return 'ZipItem{item1: $item1, item2: $item2}';
   }
 
   ZipItem<I1, I2> copyWith({I1? item1, I2? item2,})
@@ -159,6 +233,7 @@ class ZipItem<I1, I2>{
     };
   }
   List toList()=> [item1, item2];
+  ///Creates ZipItem from list of exactly 2
   factory ZipItem.fromList(List list){
     if (list.length != 2)
     {throw ArgumentError('To create ZipItem list must be size two');}

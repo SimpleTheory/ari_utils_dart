@@ -12,6 +12,31 @@ void main() {
     test('Reverse', () {
       expect(reverse(exampleList), equals([1.5, 1, 0, -1]));
     });
+    test('Pythonic List Enumeration', (){
+      List<String> a = ['a','b','c'];
+      List b = [];
+      for (EnumListItem<String> i in enumerateList(a)){
+        b.add(i.i);
+        b.add(i.v);
+      }
+      expect(b, equals([0,'a',1,'b',2,'c']));
+    });
+    test('Pythonic Range default', (){
+
+    });
+    test('Pythonic range start stop', (){
+
+    });
+    test('Pythonic range start stop step', (){
+
+    });
+    test('Pythonic range with comically large step', (){
+
+    });
+    test('Pythonic range but stop < start so error', (){
+
+    });
+
 
     test('Num is Int', (){
       expect(exampleList[0].isInt, isTrue);
@@ -27,13 +52,52 @@ void main() {
     });
   });
   //TODO
-  group('Pythonic Enumeration', (){
-    test('', (){
+  group('ZipItem', (){
+    test('[]', (){
+
+    });
+    test('[]=', (){
+
+    });
+    test('[]= Error', (){
+
+    });
+    test('Swap', (){
+
+    });
+    test('==', (){
+
+    });
+    test('toString', (){
+
+    });
+    test('toList', (){
+
+    });
+    test('toList Failed', (){
+
+    });
+    test('toMap', (){
+
+    });
+    test('toString', (){
 
     });
   });
   //TODO
-  group('Zip and ZipItem', (){
+  group('Zip', (){
+    test('', (){
+
+    });
+    test('', (){
+
+    });
+    test('', (){
+
+    });
+    test('', (){
+
+    });
     test('', (){
 
     });
