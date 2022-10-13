@@ -14,14 +14,12 @@ extension PythonicListMethods<E> on List<E> {
   ///Returns a list slice from given list with all indeces contained within the
   ///given range. By default start=0, stop=list.length, step=1. Invalid inputs
   ///are met with ArgumentErrors.
-  List<E> slice({int? stop, int? start, int? step}){
+  List<E> slice({int? stop, int start=0, int step=1}){
     //Defaults
     stop ??= length;
-    start ??= 0;
-    step ??= 1;
 
     //Clean Up Index (Negative and invalid start/stops)
-    while(start!<0){start+=length;}
+    while(start<0){start+=length;}
     while(stop!<0){stop+=length;}
     if (start>length||stop>length)
     {throw ArgumentError('Either stop $stop or start $start is greater than the '
@@ -31,6 +29,16 @@ extension PythonicListMethods<E> on List<E> {
     List<E> newList = [];
     for (int i in range(stop, start: start, step: step)){
       newList.add(this[i]);
+    }
+    return newList;
+  }
+  ///Same as func but implemented as a method
+  List<List<E>> splitBeforeIndex(int index){
+    while (index<0){index += length;}
+    List<List<E>> newList = [[],[]];
+    for (int i in range(length)){
+      if (i>=index){newList[1].add(this[i]);}
+      else {newList[0].add(this[i]);}
     }
     return newList;
   }
