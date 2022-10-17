@@ -50,6 +50,9 @@ List<T> reverse<T>(List<T> x) => List<T>.from(x.reversed);
 ///Returns a list of two sublists:
 /// 1. All items before specified index
 /// 2. All items after specified index
+/// Negative [-1] is the same as the last list item and all negative numbers are likewise
+/// 0 leads to [[],[og_list]]
+/// whereas an index>oglist.length leads to [[og_list],[]]
 List<List<E>> splitBeforeIndex<E>(List<E> og_list, int index){
   while (index<0){index += og_list.length;}
   List<List<E>> newList = [[],[]];
