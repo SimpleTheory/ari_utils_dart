@@ -42,8 +42,10 @@ extension PythonicListMethods<E> on List<E> {
     }
     return newList;
   }
-}
+  E negativeIndex(int index){while (index<0){index+=length;}return this[index];}
+  void negativeIndexEquals(int index, E value){while (index<0){index+=length;}this[index]=value;}
 
+}
 ///Returns a reversed shallow copy of input list
 List<T> reverse<T>(List<T> x) => List<T>.from(x.reversed);
 
@@ -188,7 +190,6 @@ class Zip<I1, I2> extends DelegatingList<ZipItem<I1 ,I2>>{
 //</editor-fold>
 
 }
-
 ///Data class for a pair belonging to a zip with some functionality including:
 /// swapping, ==, to & From type constructors, [] operations.
 class ZipItem<I1, I2>{
