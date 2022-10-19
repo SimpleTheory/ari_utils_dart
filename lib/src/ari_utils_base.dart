@@ -170,7 +170,7 @@ class Zip<I1, I2> extends DelegatingList<ZipItem<I1 ,I2>>{
     return 'Zip{_base: $_base}';
   }
 
-  Zip copyWith({List<ZipItem<I1, I2>>? base}) => Zip(base ?? _base,);
+  Zip copyWith({List<ZipItem<I1, I2>>? base}) => Zip(base ?? List.from(_base));
 
   Map<I1, I2> toMap() {
     Map<I1, I2> m = {};
@@ -237,6 +237,7 @@ class ZipItem<I1, I2>{
   }
 
   ZipItem<I1, I2> copyWith({I1? item1, I2? item2,})
+  // currently broken because references are passed as deep copies
   =>ZipItem(item1 ?? this.item1, item2 ?? this.item2,);
 
 
