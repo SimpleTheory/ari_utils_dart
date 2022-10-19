@@ -10,7 +10,6 @@ extension NumIs on num {
   bool get isDouble => !isInt;
 ///Checks if a number > 0
   bool get isPositive => this > 0;}
-mixin PythonicList{}
 extension PythonicListMethods<E> on List<E>{
   ///Returns a list slice from given list with all indeces contained within the
   ///given range. By default start=0, stop=list.length, step=1. Invalid inputs
@@ -48,6 +47,7 @@ extension PythonicListMethods<E> on List<E>{
 
 
 }
+
 ///Returns a reversed shallow copy of input list
 List<T> reverse<T>(List<T> x) => List<T>.from(x.reversed);
 
