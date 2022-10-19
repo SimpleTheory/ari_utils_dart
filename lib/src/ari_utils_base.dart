@@ -45,16 +45,7 @@ extension PythonicListMethods<E> on List<E>{
   }
   E negativeIndex(int index){while (index<0){index+=length;}return this[index];}
   void negativeIndexEquals(int index, E value){while (index<0){index+=length;}this[index]=value;}
-  // @override
-  // int get hashCode => this.hashCode;
-  // @override
-  // bool operator ==(o){
-  //   if (o !is List){return false;}
-  //   if (length != o.length){return false;}
-  //   for (int i in range(length)){
-  //     if (this[i] != o[i]){return false;}
-  //   }
-  //   return true;}
+
 
 }
 ///Returns a reversed shallow copy of input list
@@ -175,6 +166,7 @@ class Zip<I1, I2> extends DelegatingList<ZipItem<I1 ,I2>>{
 
   @override
   String toString() {
+    // == is dependent on this
     return 'Zip{_base: $_base}';
   }
 
@@ -240,6 +232,7 @@ class ZipItem<I1, I2>{
 
   @override
   String toString() {
+    // == is dependent on this
     return 'ZipItem{item1: $item1, item2: $item2}';
   }
 
