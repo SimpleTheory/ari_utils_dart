@@ -40,11 +40,11 @@ void main() {
 
     test('Num is Int', (){
       expect(exampleList[0].isInt, isTrue);
-      expect(exampleList[-1].isInt, isFalse);
+      expect(exampleList.negativeIndex(-1).isInt, isFalse);
     });
     test('Num is Float', (){
       expect(exampleList[0].isDouble, isFalse);
-      expect(exampleList[-1].isDouble, isTrue);
+      expect(exampleList.negativeIndex(-1).isDouble, isTrue);
     });
     test('Num is positive', (){
       expect(0.isPositive, isFalse);
@@ -66,6 +66,7 @@ void main() {
 
     });
     test('==', (){
+      expect(ZipItem('a', 1), ZipItem('a', 1));
 
     });
     test('toString', (){
@@ -95,7 +96,10 @@ void main() {
     test('', (){
 
     });
-    test('', (){
+    test('==', (){
+      List list_1 = [1,2,3,4,5];
+      List list_2 = ['a','b','c','d','e'];
+      expect(Zip.create(list_1, list_2), Zip.create(list_1, list_2));
 
     });
     test('', (){
