@@ -66,7 +66,15 @@ void main() {
 
     });
     test('==', (){
+      print(ZipItem([1,2,3], ['a','b','c']) == ZipItem([1,2,3], ['a','b','c']));
       expect(ZipItem('a', 1), ZipItem('a', 1));
+      expect(ZipItem([1,2,3], ['a','b','c']), equals(ZipItem([1,2,3], ['a','b','c'])));
+
+    });
+    test('== falsey', (){
+      print(ZipItem([1,2,1], ['a','b','c']) == ZipItem([1,2,3], ['a','b','c']));
+      expect(ZipItem('a', 2) == ZipItem('a', 1), isFalse);
+      expect(ZipItem([1,3], ['a','b','c']) == ZipItem([1,2,3], ['a','b','c']), isFalse);
 
     });
     test('toString', (){

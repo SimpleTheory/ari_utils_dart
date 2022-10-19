@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:ari_utils/ari_utils.dart';
 import 'package:collection/collection.dart';
+import 'package:quiver/core.dart';
 
 extension NumIs on num {
 ///Checks if num is int
@@ -9,8 +10,8 @@ extension NumIs on num {
   bool get isDouble => !isInt;
 ///Checks if a number > 0
   bool get isPositive => this > 0;}
-
-extension PythonicListMethods<E> on List<E> {
+mixin PythonicList{}
+extension PythonicListMethods<E> on List<E>{
   ///Returns a list slice from given list with all indeces contained within the
   ///given range. By default start=0, stop=list.length, step=1. Invalid inputs
   ///are met with ArgumentErrors.
@@ -44,6 +45,16 @@ extension PythonicListMethods<E> on List<E> {
   }
   E negativeIndex(int index){while (index<0){index+=length;}return this[index];}
   void negativeIndexEquals(int index, E value){while (index<0){index+=length;}this[index]=value;}
+  // @override
+  // int get hashCode => this.hashCode;
+  // @override
+  // bool operator ==(o){
+  //   if (o !is List){return false;}
+  //   if (length != o.length){return false;}
+  //   for (int i in range(length)){
+  //     if (this[i] != o[i]){return false;}
+  //   }
+  //   return true;}
 
 }
 ///Returns a reversed shallow copy of input list
@@ -157,8 +168,7 @@ class Zip<I1, I2> extends DelegatingList<ZipItem<I1 ,I2>>{
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Zip &&
-          runtimeType == other.runtimeType &&
-          _base == other._base);
+          toString() == other.toString());
 
   @override
   int get hashCode => _base.hashCode;
@@ -222,12 +232,11 @@ class ZipItem<I1, I2>{
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ZipItem &&
-          runtimeType == other.runtimeType &&
-          item1 == other.item1 &&
-          item2 == other.item2);
+          item1.toString() == other.item1.toString() &&
+          item2.toString() == other.item2.toString());
 
   @override
-  int get hashCode => item1.hashCode ^ item2.hashCode;
+  int get hashCode => hash2(item1.hashCode, item2.hashCode);
 
   @override
   String toString() {
