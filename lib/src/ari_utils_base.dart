@@ -290,3 +290,22 @@ class EnumListItem<T>{
 //   return uwu;
 // }
 
+/// Logic operators on booleans
+abstract class Logical{
+  convertToBool(val){}
+  toBit(bool bool_)=>bool_ ? 1 : 0;
+  static bool xand(bool a, bool b){
+    if ((a && b)||(!a && !b)){
+      return true;
+    }
+    return false;
+  }
+  static bool xor(bool a, bool b){
+    return !xand(a, b);
+  }
+  static bool not(bool a){return !a;}
+  static bool nor(bool a, bool b){
+    if (!a && !b){return true;}
+    return false;
+  }
+}
