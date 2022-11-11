@@ -47,6 +47,22 @@ extension PythonicListMethods<E> on List<E>{
 
 
 }
+extension MapUtils<K, V> on Map<K, V>{
+  Map<V, K> swap(){
+    Map<V, K> newMap = {};
+    Set<V> duplicateChecker= Set.from(values);
+    if (duplicateChecker.length < length){throw ArgumentError('There are duplicate'
+        'values inside the list, so muri da');}
+    forEach((key, value) {newMap[value]=key;});
+    return newMap;
+  }
+}
+extension on String {
+  /// To iterate a [String]: `"Hello".iterable()`
+  Iterable<String> iterable() sync* {
+    for (var i = 0; i < length; i++) {
+      yield this[i];
+    }}}
 
 ///Returns a reversed shallow copy of input list
 List<T> reverse<T>(List<T> x) => List<T>.from(x.reversed);

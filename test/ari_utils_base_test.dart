@@ -50,6 +50,11 @@ void main() {
       expect(0.isPositive, isFalse);
       expect(0.1.isPositive, isTrue);
     });
+    test('dict swap', (){
+      Map<int, String> a = {1: 'a', 2: 'b'};
+      Map<String, int> b = {'a': 1, 'b': 2};
+      expect(a.swap(), b);
+    });
   });
   //TODO
   group('ZipItem', (){
