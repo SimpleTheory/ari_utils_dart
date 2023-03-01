@@ -1,5 +1,5 @@
+import 'dart:collection';
 import 'dart:convert';
-import 'package:ari_utils/ari_utils.dart';
 import 'package:collection/collection.dart';
 import 'package:quiver/core.dart';
 
@@ -57,12 +57,57 @@ extension MapUtils<K, V> on Map<K, V>{
     return newMap;
   }
 }
-extension on String {
+extension StringExt on String {
   /// To iterate a [String]: `"Hello".iterable()`
   Iterable<String> iterable() sync* {
     for (var i = 0; i < length; i++) {
       yield this[i];
-    }}}
+    }
+  }
+  List<String> splitByNumber(RegExp regExp, {int? number,
+      bool keepMatchAsEntry = false, bool keepMatchAsTrailing = false, bool keepMatchAsLeading = false}){
+    if (regExp.hasMatch(this)){
+      String? lastMatch;
+      List<String> result = [];
+      String strProxy = this;
+      while (regExp.hasMatch(strProxy) && (number==null || number > 0)){
+        RegExpMatch match = regExp.firstMatch(this)!;
+        if (keepMatchAsEntry){
+          result.add(strProxy.substring(0, match.start));
+          result.add(strProxy.substring(match.start, match.end+1));
+        }
+        else if (keepMatchAsTrailing){
+          result.add(strProxy.substring(0, match.end+1));}
+        else if (keepMatchAsLeading){
+          if (lastMatch == null){
+            result.add(strProxy.substring(1, match.start));
+          }
+          else{
+            result.add(lastMatch + (strProxy.substring(1, match.start)));
+          }
+
+
+        }
+        else{
+          result.add(strProxy.substring(0, match.start));
+        }
+
+        lastMatch = match.group(0);
+        if (number !=null){number -= 1;}
+        if (match.end != strProxy.length){
+            strProxy = strProxy.substring(match.end);}
+        if ((!regExp.hasMatch(this) || number==0) && strProxy.isNotEmpty){
+          result.add(keepMatchAsLeading ? lastMatch! + strProxy : strProxy);
+        }
+      }
+      return result;
+    }
+    else{
+      return [this];
+    }
+  }
+}
+
 
 ///Returns a reversed shallow copy of input list
 List<T> reverse<T>(List<T> x) => List<T>.from(x.reversed);
@@ -116,7 +161,7 @@ Iterable<int> range(int stop, {int? start, int? step}) sync* {
 ///   etc
 class Zip<I1, I2> extends DelegatingList<ZipItem<I1 ,I2>>{
   final List<ZipItem<I1,I2>> _base;
-  Zip(this._base) : super(_base);
+  Zip (this._base) : super(_base);
 
   void addItem(I1 item1, I2 item2){
     _base.add(ZipItem(item1, item2));
@@ -325,3 +370,4 @@ abstract class Logical{
     return false;
   }
 }
+
