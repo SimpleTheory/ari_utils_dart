@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'package:ari_utils/ari_utils.dart';
 import 'package:collection/collection.dart';
-import 'package:quiver/core.dart';
 
+// Dependent typedefs
+typedef BoolFunctionMap = bool Function(MapEntry);
+
+// Extensions
 extension NumIs on num {
 ///Checks if num is int
   bool get isInt => (this % 1) == 0;
@@ -44,10 +47,12 @@ extension PythonicListMethods<E> on List<E>{
   }
   E negativeIndex(int index){while (index<0){index+=length;}return this[index];}
   void negativeIndexEquals(int index, E value){while (index<0){index+=length;}this[index]=value;}
+  equals(Object other)=>(identical(this, other) ||(DeepCollectionEquality().equals(this, other)));
 
 
 }
 extension MapUtils<K, V> on Map<K, V>{
+
   Map<V, K> swap(){
     Map<V, K> newMap = {};
     Set<V> duplicateChecker= Set.from(values);
@@ -55,6 +60,17 @@ extension MapUtils<K, V> on Map<K, V>{
         'values inside the list, so muri da');}
     forEach((key, value) {newMap[value]=key;});
     return newMap;
+  }
+  equals(Object other)=>(identical(this, other) ||(DeepCollectionEquality().equals(this, other)));
+  Map<K, V> where(BoolFunctionMap func){
+    Map<K,V> newMap = {};
+    for (MapEntry entry in entries){
+      if (func(entry)){
+        newMap[entry.key] = entry.value;
+      }
+    }
+    return newMap;
+
   }
 }
 extension on String {
@@ -244,7 +260,7 @@ class ZipItem<I1, I2>{
           item2.toString() == other.item2.toString());
 
   @override
-  int get hashCode => hash2(item1.hashCode, item2.hashCode);
+  int get hashCode => item1.hashCode ^ item2.hashCode;
 
   @override
   String toString() {
@@ -308,7 +324,7 @@ class EnumListItem<T>{
 
 /// Logic operators on booleans
 abstract class Logical{
-  convertToBool(val){}
+  convertToBool(val){} //TODO IMPLEMENT
   toBit(bool bool_)=>bool_ ? 1 : 0;
   static bool xand(bool a, bool b){
     if ((a && b)||(!a && !b)){

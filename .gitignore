@@ -12,3 +12,4 @@ pubspec.lock
 # Random files
 test/trying_things.dart
 /.idea/
+/test/dataclass_tryings.dart
