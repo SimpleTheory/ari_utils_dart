@@ -1,7 +1,7 @@
 import 'package:ari_utils/src/ari_utils_base.dart';
 import 'package:test/test.dart';
 
-///TODO Write tests for:
+///TODO Finish tests for all functions/classes in main file
 ///   All range cases
 ///   Every method of Zip and its cases
 ///   List enumeration
@@ -21,8 +21,12 @@ void main() {
       }
       expect(b, equals([0,'a',1,'b',2,'c']));
     });
+    test('Negative Index', (){
+    List<String> a = ['a','b','c'];
+    expect(a.negativeIndex(-1), 'c');
+    });
     test('Pythonic Range default', (){
-
+      expect(range(5).map((e) => e).toList().length, 5);
     });
     test('Pythonic range start stop', (){
 
@@ -56,7 +60,6 @@ void main() {
       expect(a.swap(), b);
     });
   });
-  //TODO
   group('ZipItem', (){
     test('[]', (){
 
@@ -98,7 +101,6 @@ void main() {
 
     });
   });
-  //TODO
   group('Zip', (){
     test('', (){
 
@@ -106,8 +108,14 @@ void main() {
     test('', (){
 
     });
-    test('', (){
-
+    test('iterator', (){
+      List<int> list_1 = [1,2,3,4,5];
+      List<String> list_2 = ['a','b','c','d','e'];
+      ZipItem<int, String> b = ZipItem(0, 'z');
+      for (ZipItem<int, String> a in Zip.create(list_1, list_2)){
+        b = a;
+      }
+      expect(b, ZipItem(5, 'e'));
     });
     test('==', (){
       List list_1 = [1,2,3,4,5];

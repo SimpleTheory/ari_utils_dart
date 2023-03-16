@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:ari_utils/ari_utils.dart';
 import 'package:collection/collection.dart';
 
 // Dependent typedefs
@@ -14,7 +13,7 @@ extension NumIs on num {
 ///Checks if a number > 0
   bool get isPositive => this > 0;}
 extension PythonicListMethods<E> on List<E>{
-  ///Returns a list slice from given list with all indeces contained within the
+  ///Returns a list slice from given list with all indices contained within the
   ///given range. By default start=0, stop=list.length, step=1. Invalid inputs
   ///are met with ArgumentErrors.
   List<E> slice({int? stop, int start=0, int step=1}){
@@ -35,7 +34,12 @@ extension PythonicListMethods<E> on List<E>{
     }
     return newList;
   }
-  ///Same as func but implemented as a method
+  ///Returns a list of two sub-lists based off self:
+  /// List 1: All items before specified index
+  /// List 2: All items after specified index
+  /// Negative [-1] is the same as the last list item and all negative numbers are likewise
+  /// 0 leads to [[],[this]]
+  /// whereas an index>this.length leads to [[this],[]]
   List<List<E>> splitBeforeIndex(int index){
     while (index<0){index += length;}
     List<List<E>> newList = [[],[]];
@@ -45,23 +49,34 @@ extension PythonicListMethods<E> on List<E>{
     }
     return newList;
   }
+  ///Similar to negative index in python [-1] will return the last thing in the list
+  ///0 or over will return its [] operator
   E negativeIndex(int index){while (index<0){index+=length;}return this[index];}
+  ///Setter for above
   void negativeIndexEquals(int index, E value){while (index<0){index+=length;}this[index]=value;}
   equals(Object other)=>(identical(this, other) ||(DeepCollectionEquality().equals(this, other)));
 
 
 }
 extension MapUtils<K, V> on Map<K, V>{
-
+  ///Checks if a map contains duplicate values in its values by using sets
+  bool containsDuplicateValues(){
+    Set<V> check = Set<V>.from(values);
+    return check.length == values.length;
+  }
+  ///Returns a map with the keys and values swapped. If there are duplicate keys
+  ///the function throws an argument error (So use with containsDuplicateValues()).
   Map<V, K> swap(){
     Map<V, K> newMap = {};
     Set<V> duplicateChecker= Set.from(values);
     if (duplicateChecker.length < length){throw ArgumentError('There are duplicate'
-        'values inside the list, so muri da');}
+        'values in the Maps values $values. Keys need to be unique therefore the swap could\'t happen');}
     forEach((key, value) {newMap[value]=key;});
     return newMap;
   }
   equals(Object other)=>(identical(this, other) ||(DeepCollectionEquality().equals(this, other)));
+  ///Works like List.where(), you put in a function that takes a MapEntry and returns a bool.
+  ///This will return new Map where the above function is true.
   Map<K, V> where(BoolFunctionMap func){
     Map<K,V> newMap = {};
     for (MapEntry entry in entries){
@@ -73,7 +88,7 @@ extension MapUtils<K, V> on Map<K, V>{
 
   }
 }
-extension on String {
+extension StringIter on String {
   /// To iterate a [String]: `"Hello".iterable()`
   Iterable<String> iterable() sync* {
     for (var i = 0; i < length; i++) {
@@ -82,22 +97,6 @@ extension on String {
 
 ///Returns a reversed shallow copy of input list
 List<T> reverse<T>(List<T> x) => List<T>.from(x.reversed);
-
-///Returns a list of two sublists:
-/// 1. All items before specified index
-/// 2. All items after specified index
-/// Negative [-1] is the same as the last list item and all negative numbers are likewise
-/// 0 leads to [[],[og_list]]
-/// whereas an index>oglist.length leads to [[og_list],[]]
-List<List<E>> splitBeforeIndex<E>(List<E> og_list, int index){
-  while (index<0){index += og_list.length;}
-  List<List<E>> newList = [[],[]];
-  for (int i in range(og_list.length)){
-    if (i>=index){newList[1].add(og_list[i]);}
-    else {newList[0].add(og_list[i]);}
-  }
-  return newList;
-}
 
 ///Similar to python range function iterates from start up to yet not including
 ///stop, incrementing by every step.
@@ -121,15 +120,15 @@ Iterable<int> range(int stop, {int? start, int? step}) sync* {
   }
 }
 
-///Zip is a list class with added functionality that pairs two equal matching
-///lists, iterators, sets, etc and combines the elements of the two lists at
-///into a compound ZipItem that contains both of those elements. The added
+///[Zip] is a list class with added functionality that pairs two equal matching
+///iterables and combines the elements of the two iterables
+///into a compound [ZipItem] that contains both of those elements. The added
 ///functionality is related to things therein such as:
 ///   swap all elements,
 ///   go from zip to map,
-///   check if an element is container
-///   within any of the pairs,
+///   check if an element is contained within any of the pairs,
 ///   etc
+///Like zip() in python
 class Zip<I1, I2> extends DelegatingList<ZipItem<I1 ,I2>>{
   final List<ZipItem<I1,I2>> _base;
   Zip(this._base) : super(_base);
@@ -224,7 +223,9 @@ class Zip<I1, I2> extends DelegatingList<ZipItem<I1 ,I2>>{
 //</editor-fold>
 
 }
-///Data class for a pair belonging to a zip with some functionality including:
+
+
+///Class for a pair belonging to a zip with some functionality including:
 /// swapping, ==, to & From type constructors, [] operations.
 class ZipItem<I1, I2>{
   I1 item1;
@@ -279,7 +280,9 @@ class ZipItem<I1, I2>{
       'item2': item2,
     };
   }
+
   List toList()=> [item1, item2];
+
   ///Creates ZipItem from list of exactly 2
   factory ZipItem.fromList(List list){
     if (list.length != 2)
@@ -293,7 +296,8 @@ class ZipItem<I1, I2>{
 //</editor-fold>
 }
 
-
+///Like python enumerate but with [EnumListItem] to iterate over a list with
+///its index and value in a comfortable way.
 Iterable<EnumListItem<T>> enumerateList<T>(List<T> list) sync* {
   int i = 0;
   for (T v in list){
@@ -301,6 +305,8 @@ Iterable<EnumListItem<T>> enumerateList<T>(List<T> list) sync* {
     i++;
   }
 }
+
+///Class to hold index and value of a list specifically with [enumerateList].
 class EnumListItem<T>{
   int index;
   T value;
@@ -309,23 +315,11 @@ class EnumListItem<T>{
   T get v => value;
 }
 
-// class EnumMapItem<K, V>{
-//   K key;
-//   V value;
-//   EnumMapItem(this.key, this.value);
-//   K get k=>key;
-//   V get v=>value;
-// }
-// Iterable<EnumMapItem<K, V>> enumerateMap<K, V>(Map<K, V> inputtedMap){
-//   List<EnumMapItem<K, V>> uwu = [];
-//   inputtedMap.forEach((key, value) {uwu.add(EnumMapItem(key, value));});
-//   return uwu;
-// }
 
 /// Logic operators on booleans
 abstract class Logical{
-  convertToBool(val){} //TODO IMPLEMENT
-  toBit(bool bool_)=>bool_ ? 1 : 0;
+
+  static int toBit(bool b) => b ? 1 : 0;
   static bool xand(bool a, bool b){
     if ((a && b)||(!a && !b)){
       return true;
@@ -335,9 +329,41 @@ abstract class Logical{
   static bool xor(bool a, bool b){
     return !xand(a, b);
   }
-  static bool not(bool a){return !a;}
+  static bool not(bool a) => !a;
   static bool nor(bool a, bool b){
     if (!a && !b){return true;}
     return false;
   }
+  static bool all(List<bool?> args){
+    return !args.contains(false) && !args.contains(null) && args.isNotEmpty;
+  }
+  static bool any(List<bool?> args)=>args.contains(true);
+}
+
+/// Converts any val to boolean
+///   [int] != 0
+///   null => false
+///   [bool] => [val]
+///   tries: [val.isNotEmpty]
+///   if has no getter isNotEmpty => true
+bool toBool(val){
+  if (val is bool){
+    return val;
+  }
+  if (val == null){
+    return false;
+  }
+  if (val is num){
+    return val != 0;
+  }
+  // For strings|iterables
+  // <editor-fold desc="Is not empty">
+  try{
+    return val.isNotEmpty;
+  }
+  on NoSuchMethodError{
+    // Pass
+  }
+  // </editor-fold>
+  return true;
 }
