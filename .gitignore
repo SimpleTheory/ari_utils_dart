@@ -13,3 +13,4 @@ pubspec.lock
 test/trying_things.dart
 /.idea/
 /test/dataclass_tryings.dart
+/doc/

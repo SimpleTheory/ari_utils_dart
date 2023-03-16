@@ -54,7 +54,7 @@ extension PythonicListMethods<E> on List<E>{
   E negativeIndex(int index){while (index<0){index+=length;}return this[index];}
   ///Setter for above
   void negativeIndexEquals(int index, E value){while (index<0){index+=length;}this[index]=value;}
-  equals(Object other)=>(identical(this, other) ||(DeepCollectionEquality().equals(this, other)));
+  bool equals(Object other)=>(identical(this, other) ||(DeepCollectionEquality().equals(this, other)));
 
 
 }
@@ -74,7 +74,7 @@ extension MapUtils<K, V> on Map<K, V>{
     forEach((key, value) {newMap[value]=key;});
     return newMap;
   }
-  equals(Object other)=>(identical(this, other) ||(DeepCollectionEquality().equals(this, other)));
+  bool equals(Object other)=>(identical(this, other) ||(DeepCollectionEquality().equals(this, other)));
   ///Works like List.where(), you put in a function that takes a MapEntry and returns a bool.
   ///This will return new Map where the above function is true.
   Map<K, V> where(BoolFunctionMap func){
@@ -89,8 +89,9 @@ extension MapUtils<K, V> on Map<K, V>{
   }
 }
 extension StringIter on String {
-  /// To iterate a [String]: `"Hello".iterable()`
-  Iterable<String> iterable() sync* {
+  /// Use to iterate over the individual characters
+  /// of a String: `"Hello".iterable()` -> 'H' 'e' 'l' 'l' 'o'
+  Iterable<String> iterate() sync* {
     for (var i = 0; i < length; i++) {
       yield this[i];
     }}}
@@ -316,9 +317,10 @@ class EnumListItem<T>{
 }
 
 
-/// Logic operators on booleans
+/// Logic operators for booleans
 abstract class Logical{
 
+  ///Takes bool and returns 1 if true 0 if false
   static int toBit(bool b) => b ? 1 : 0;
   static bool xand(bool a, bool b){
     if ((a && b)||(!a && !b)){
@@ -334,9 +336,11 @@ abstract class Logical{
     if (!a && !b){return true;}
     return false;
   }
+  ///Returns true if all entries are true, else false
   static bool all(List<bool?> args){
     return !args.contains(false) && !args.contains(null) && args.isNotEmpty;
   }
+  ///Returns true if any entry is true, else false
   static bool any(List<bool?> args)=>args.contains(true);
 }
 
