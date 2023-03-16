@@ -6,95 +6,137 @@ typedef BoolFunctionMap = bool Function(MapEntry);
 
 // Extensions
 extension NumIs on num {
-///Checks if num is int
+  ///Checks if num is int
   bool get isInt => (this % 1) == 0;
-///Checks if num is decimal
+
+  ///Checks if num is decimal
   bool get isDouble => !isInt;
-///Checks if a number > 0
-  bool get isPositive => this > 0;}
-extension PythonicListMethods<E> on List<E>{
+
+  ///Checks if a number > 0
+  bool get isPositive => this > 0;
+}
+
+extension PythonicListMethods<E> on List<E> {
   ///Returns a list slice from given list with all indices contained within the
-  ///given range. By default start=0, stop=list.length, step=1. Invalid inputs
+  ///given range. START INCLUSIVE | END EXCLUSIVE. By default start=0, stop=list.length, step=1. Invalid inputs
   ///are met with ArgumentErrors.
-  List<E> slice({int? stop, int start=0, int step=1}){
+  ///ex:
+  ///[1,2,3,5,6].slice(4) => 1 2 3
+  List<E> slice(int? stop, {int start = 0, int step = 1}) {
     //Defaults
     stop ??= length;
 
     //Clean Up Index (Negative and invalid start/stops)
-    while(start<0){start+=length;}
-    while(stop!<0){stop+=length;}
-    if (start>length||stop>length)
-    {throw ArgumentError('Either stop $stop or start $start is greater than the '
-        'length of this list $this | length: $length');}
+    while (start < 0) {
+      start += length;
+    }
+    while (stop! < 0) {
+      stop += length;
+    }
+    if (start > length || stop > length) {
+      throw ArgumentError(
+          'Either stop $stop or start $start is greater than the '
+          'length of this list $this | length: $length');
+    }
+    if (start == 0){return <E>[];}
 
     //Create new list and add things from range into the list
     List<E> newList = [];
-    for (int i in range(stop, start: start, step: step)){
+    for (int i in range(stop, start: start, step: step)) {
       newList.add(this[i]);
     }
     return newList;
   }
+
   ///Returns a list of two sub-lists based off self:
   /// List 1: All items before specified index
   /// List 2: All items after specified index
   /// Negative [-1] is the same as the last list item and all negative numbers are likewise
   /// 0 leads to [[],[this]]
   /// whereas an index>this.length leads to [[this],[]]
-  List<List<E>> splitBeforeIndex(int index){
-    while (index<0){index += length;}
-    List<List<E>> newList = [[],[]];
-    for (int i in range(length)){
-      if (i>=index){newList[1].add(this[i]);}
-      else {newList[0].add(this[i]);}
+  List<List<E>> splitBeforeIndex(int index) {
+    while (index < 0) {
+      index += length;
+    }
+    List<List<E>> newList = [[], []];
+    for (int i in range(length)) {
+      if (i >= index) {
+        newList[1].add(this[i]);
+      } else {
+        newList[0].add(this[i]);
+      }
     }
     return newList;
   }
+
   ///Similar to negative index in python [-1] will return the last thing in the list
   ///0 or over will return its [] operator
-  E negativeIndex(int index){while (index<0){index+=length;}return this[index];}
+  E negativeIndex(int index) {
+    while (index < 0) {
+      index += length;
+    }
+    return this[index];
+  }
+
   ///Setter for above
-  void negativeIndexEquals(int index, E value){while (index<0){index+=length;}this[index]=value;}
-  bool equals(Object other)=>(identical(this, other) ||(DeepCollectionEquality().equals(this, other)));
+  void negativeIndexEquals(int index, E value) {
+    while (index < 0) {
+      index += length;
+    }
+    this[index] = value;
+  }
 
-
+  bool equals(Object other) => (identical(this, other) ||
+      (DeepCollectionEquality().equals(this, other)));
 }
-extension MapUtils<K, V> on Map<K, V>{
+
+extension MapUtils<K, V> on Map<K, V> {
   ///Checks if a map contains duplicate values in its values by using sets
-  bool containsDuplicateValues(){
+  bool containsDuplicateValues() {
     Set<V> check = Set<V>.from(values);
     return check.length == values.length;
   }
+
   ///Returns a map with the keys and values swapped. If there are duplicate keys
   ///the function throws an argument error (So use with containsDuplicateValues()).
-  Map<V, K> swap(){
+  Map<V, K> swap() {
     Map<V, K> newMap = {};
-    Set<V> duplicateChecker= Set.from(values);
-    if (duplicateChecker.length < length){throw ArgumentError('There are duplicate'
-        'values in the Maps values $values. Keys need to be unique therefore the swap could\'t happen');}
-    forEach((key, value) {newMap[value]=key;});
+    Set<V> duplicateChecker = Set.from(values);
+    if (duplicateChecker.length < length) {
+      throw ArgumentError('There are duplicate'
+          'values in the Maps values $values. Keys need to be unique therefore the swap could\'t happen');
+    }
+    forEach((key, value) {
+      newMap[value] = key;
+    });
     return newMap;
   }
-  bool equals(Object other)=>(identical(this, other) ||(DeepCollectionEquality().equals(this, other)));
-  ///Works like List.where(), you put in a function that takes a MapEntry and returns a bool.
+
+  bool equals(Object other) => (identical(this, other) ||
+      (DeepCollectionEquality().equals(this, other)));
+
+  ///Works like [List.where], you put in a function that takes a MapEntry and returns a bool.
   ///This will return new Map where the above function is true.
-  Map<K, V> where(BoolFunctionMap func){
-    Map<K,V> newMap = {};
-    for (MapEntry entry in entries){
-      if (func(entry)){
+  Map<K, V> where(BoolFunctionMap func) {
+    Map<K, V> newMap = {};
+    for (MapEntry entry in entries) {
+      if (func(entry)) {
         newMap[entry.key] = entry.value;
       }
     }
     return newMap;
-
   }
 }
+
 extension StringIter on String {
   /// Use to iterate over the individual characters
-  /// of a String: `"Hello".iterable()` -> 'H' 'e' 'l' 'l' 'o'
+  /// of a String: `"Hello".iterate()` -> 'H' 'e' 'l' 'l' 'o'
   Iterable<String> iterate() sync* {
     for (var i = 0; i < length; i++) {
       yield this[i];
-    }}}
+    }
+  }
+}
 
 ///Returns a reversed shallow copy of input list
 List<T> reverse<T>(List<T> x) => List<T>.from(x.reversed);
@@ -109,14 +151,20 @@ List<T> reverse<T>(List<T> x) => List<T>.from(x.reversed);
 Iterable<int> range(int stop, {int? start, int? step}) sync* {
   step ??= 1;
   start ??= 0;
-  if (step==0){throw ArgumentError('Step is 0, can\'t iterate');}
-  if (stop==start){throw ArgumentError('Start $start is == stop $stop');}
-  else if (stop>start && step.isNegative){throw ArgumentError('Start $start is >'
-      ' than stop $stop, yet step $step is positive');}
-  else if (stop<start && step.isPositive){throw ArgumentError('Start $start is <'
-      ' than stop $stop, yet step $step is negative');}
+  if (step == 0) {
+    throw ArgumentError('Step is 0, can\'t iterate');
+  }
+  if (stop == start) {
+    throw ArgumentError('Start $start is == stop $stop');
+  } else if (stop > start && step.isNegative) {
+    throw ArgumentError('Start $start is >'
+        ' than stop $stop, yet step $step is positive');
+  } else if (stop < start && step.isPositive) {
+    throw ArgumentError('Start $start is <'
+        ' than stop $stop, yet step $step is negative');
+  }
 
-  for (int i = start; i < stop; i+=step){
+  for (int i = start; i < stop; i += step) {
     yield i;
   }
 }
@@ -130,68 +178,118 @@ Iterable<int> range(int stop, {int? start, int? step}) sync* {
 ///   check if an element is contained within any of the pairs,
 ///   etc
 ///Like zip() in python
-class Zip<I1, I2> extends DelegatingList<ZipItem<I1 ,I2>>{
-  final List<ZipItem<I1,I2>> _base;
+class Zip<I1, I2> extends DelegatingList<ZipItem<I1, I2>> {
+  final List<ZipItem<I1, I2>> _base;
+
   Zip(this._base) : super(_base);
 
-  void addItem(I1 item1, I2 item2){
+  void addItem(I1 item1, I2 item2) {
     _base.add(ZipItem(item1, item2));
   }
-  Zip<I1, I2> extendItems(List<I1> a, List<I2> b){
-    return Zip.create(item1List+a, item2List+b);
+
+  Zip<I1, I2> extendItems(List<I1> a, List<I2> b) {
+    return Zip.create(item1List + a, item2List + b);
   }
 
   List<I1> get item1List => _base.map<I1>((e) => e[0]).toList();
+
   List<I2> get item2List => _base.map<I2>((e) => e[1]).toList();
 
-  factory Zip.create(List<I1> a, List<I2> b){
-    if (a.length == b.length){
+  factory Zip.create(List<I1> a, List<I2> b) {
+    if (a.length == b.length) {
       List<ZipItem<I1, I2>> baseList = [];
-      for (int i in range(a.length)){
+      for (int i in range(a.length)) {
         baseList.add(ZipItem(a[i], b[i]));
       }
       return Zip(baseList);
     }
     throw ArgumentError('Length A != Length B\n${a.length} != ${b.length}');
   }
-  factory Zip.fromEvenList(List list){
-    if (list.length % 2 != 0)
-    {throw ArgumentError('List must be even current at ${list.length}');}
+
+  ///Creates a Zip by pairing an even index with its next odd index
+  ///The list must have an even length or you will encounter an [ArgumentError]
+  ///ex:
+  /// [1,2,3,4,5,6] -->
+      /// 1,2
+      /// 3,4
+      /// 5,6
+  factory Zip.fromEvenListParity(List list){
+    if (list.length % 2 != 0) {
+      throw ArgumentError('List must be even current at ${list.length}');
+    }
     List<ZipItem<I1, I2>> newBaseList = [];
-    for (EnumListItem enumItem in enumerateList(list)){
-      if (enumItem.i + 1 > list.length) {break;}
-      else if(enumItem.i % 2 == 1){continue;}
-      else{
-        newBaseList.add(ZipItem(enumItem.value, list[enumItem.index+1]));
+    for (EnumListItem enumItem in enumerateList(list)) {
+      if (enumItem.i + 1 > list.length) {
+        break;
+      } else if (enumItem.i % 2 == 1) {
+        continue;
+      } else {
+        newBaseList.add(ZipItem(enumItem.value, list[enumItem.index + 1]));
       }
     }
     return Zip(newBaseList);
   }
-  factory Zip.fromMap(Map map_){
+
+  ///Creates a Zip by splitting the list in half and zipping the entries on the
+  ///first half of the list with the entries of the equivalent index on the second
+  ///half of the list.
+  ///The list must have an even length or you will encounter an [ArgumentError]
+  ///ex:
+  /// [1,2,3,4,5,6] -->
+    /// 1,4
+    /// 2,5
+    /// 3,6
+  factory Zip.fromEvenListSplit(List list){
+    if (list.length % 2 != 0) {
+      throw ArgumentError('List must be even current at ${list.length}');
+    }
     List<ZipItem<I1, I2>> newBaseList = [];
-    map_.forEach((key, value) {newBaseList.add(ZipItem(key, value));});
+    int halfOfList = list.length ~/ 2;
+    for (int i in range(halfOfList)){
+      newBaseList.add(ZipItem(list[i], list[i+halfOfList]));
+    }
     return Zip(newBaseList);
   }
-  Zip<I2, I1> swapAll(){
+
+  factory Zip.castFromMap(Map map_) {
+    List<ZipItem<I1, I2>> newBaseList = [];
+    map_.forEach((key, value) {
+      newBaseList.add(ZipItem(key, value));
+    });
+    return Zip(newBaseList);
+  }
+
+  List<ZipItem<I1, I2>> get base => _base;
+
+  Zip<I2, I1> swapAll() {
     return Zip(_base.map((e) => e.swap()).toList());
   }
 
-
-  bool containsValue(Object? element) {
-    for (ZipItem<I1, I2> item in _base){
-      if (item.item1==element){return true;}
-      if (item.item2==element){return true;}
+  /// Checks if item is any of the ZipItem entries, if the item is a
+  /// ZipItem checks if it is in the base list itself.
+  @override
+  bool contains(Object? element) {
+    if (element is ZipItem){
+      return _base.contains(element);
+    }
+    for (ZipItem<I1, I2> item in _base) {
+      if (item.item1 == element) {
+        return true;
+      }
+      if (item.item2 == element) {
+        return true;
+      }
     }
     return false;
   }
+
 
   //<editor-fold desc="Data Methods">
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Zip &&
-          toString() == other.toString());
+      (other is Zip && toString() == other.toString());
 
   @override
   int get hashCode => _base.hashCode;
@@ -206,49 +304,59 @@ class Zip<I1, I2> extends DelegatingList<ZipItem<I1 ,I2>>{
 
   Map<I1, I2> toMap() {
     Map<I1, I2> m = {};
-    for (ZipItem item in _base){
+    for (ZipItem item in _base) {
       m[item[0]] = item[1];
     }
     return m;
   }
 
   Map<I2, I1> toMapSwitched() {
-      Map<I2, I1> m = {};
-      for (ZipItem item in _base){
-        m[item[1]] = item[0];
-      }
-      return m;
+    Map<I2, I1> m = {};
+    for (ZipItem item in _base) {
+      m[item[1]] = item[0];
+    }
+    return m;
   }
 
-  String toJson()=> jsonEncode(_base.map((e) => e.toMap()).toList());
+  String toJson() => jsonEncode(_base.map((e) => e.toMap()).toList());
 //</editor-fold>
 
 }
 
-
 ///Class for a pair belonging to a zip with some functionality including:
 /// swapping, ==, to & From type constructors, [] operations.
-class ZipItem<I1, I2>{
+class ZipItem<I1, I2> {
   I1 item1;
   I2 item2;
 
   ZipItem(this.item1, this.item2);
+
   ///[0] retrieves first item [1] retrieves 2nd, negative numbers retrieve
   /// [0] if even or [1] if odd
-  operator [](int index){
-    if (index==0){return item1;}
-    else if (index==1){return item2;}
-    else if(index<0){return this[(index % 2)];}
+  operator [](int index) {
+    if (index == 0) {
+      return item1;
+    } else if (index == 1) {
+      return item2;
+    } else if (index < 0) {
+      return this[(index % 2)];
+    }
     throw RangeError('$index is out of range (only 1 and 2)');
   }
-  operator []= (int index, newVal){
-    if (index==0){item1=newVal;}
-    else if (index==1){item2=newVal;}
-    else if (index<0){this[(index % 2)]=newVal;}
+
+  operator []=(int index, newVal) {
+    if (index == 0) {
+      item1 = newVal;
+    } else if (index == 1) {
+      item2 = newVal;
+    } else if (index < 0) {
+      this[(index % 2)] = newVal;
+    }
     throw RangeError('$index is out of range (only 1 and 2)');
   }
+
   ///Returns shallow copy with item1 & item2 swapped
-  ZipItem<I2, I1> swap(){
+  ZipItem<I2, I1> swap() {
     return ZipItem(item2, item1);
   }
 
@@ -270,10 +378,16 @@ class ZipItem<I1, I2>{
     return 'ZipItem{item1: $item1, item2: $item2}';
   }
 
-  ZipItem<I1, I2> copyWith({I1? item1, I2? item2,})
-  // currently broken because references are passed as deep copies
-  =>ZipItem(item1 ?? this.item1, item2 ?? this.item2,);
-
+  ZipItem<I1, I2> copyWith({
+    I1? item1,
+    I2? item2,
+  })
+      // currently broken because references are passed as deep copies
+      =>
+      ZipItem(
+        item1 ?? this.item1,
+        item2 ?? this.item2,
+      );
 
   Map<String, dynamic> toMap() {
     return {
@@ -282,16 +396,21 @@ class ZipItem<I1, I2>{
     };
   }
 
-  List toList()=> [item1, item2];
+  List toList() => [item1, item2];
 
   ///Creates ZipItem from list of exactly 2
-  factory ZipItem.fromList(List list){
-    if (list.length != 2)
-    {throw ArgumentError('To create ZipItem list must be size two');}
+  factory ZipItem.fromList(List list) {
+    if (list.length != 2) {
+      throw ArgumentError('To create ZipItem list must be size two');
+    }
     return ZipItem(list[0], list[1]);
   }
+
   factory ZipItem.fromMap(Map<String, dynamic> map) {
-    return ZipItem(map['item1'] as I1, map['item2'] as I2,);
+    return ZipItem(
+      map['item1'] as I1,
+      map['item2'] as I2,
+    );
   }
 
 //</editor-fold>
@@ -301,47 +420,60 @@ class ZipItem<I1, I2>{
 ///its index and value in a comfortable way.
 Iterable<EnumListItem<T>> enumerateList<T>(List<T> list) sync* {
   int i = 0;
-  for (T v in list){
+  for (T v in list) {
     yield EnumListItem<T>(i, v);
     i++;
   }
 }
 
+Iterable<List<T>> iterateOverListPairs<T>(List<T> list) sync*{
+
+}
+
 ///Class to hold index and value of a list specifically with [enumerateList].
-class EnumListItem<T>{
+class EnumListItem<T> {
   int index;
   T value;
+
   EnumListItem(this.index, this.value);
+
   int get i => index;
+
   T get v => value;
 }
 
-
 /// Logic operators for booleans
-abstract class Logical{
-
+abstract class Logical {
   ///Takes bool and returns 1 if true 0 if false
   static int toBit(bool b) => b ? 1 : 0;
-  static bool xand(bool a, bool b){
-    if ((a && b)||(!a && !b)){
+
+  static bool xand(bool a, bool b) {
+    if ((a && b) || (!a && !b)) {
       return true;
     }
     return false;
   }
-  static bool xor(bool a, bool b){
+
+  static bool xor(bool a, bool b) {
     return !xand(a, b);
   }
+
   static bool not(bool a) => !a;
-  static bool nor(bool a, bool b){
-    if (!a && !b){return true;}
+
+  static bool nor(bool a, bool b) {
+    if (!a && !b) {
+      return true;
+    }
     return false;
   }
+
   ///Returns true if all entries are true, else false
-  static bool all(List<bool?> args){
+  static bool all(List<bool?> args) {
     return !args.contains(false) && !args.contains(null) && args.isNotEmpty;
   }
+
   ///Returns true if any entry is true, else false
-  static bool any(List<bool?> args)=>args.contains(true);
+  static bool any(List<bool?> args) => args.contains(true);
 }
 
 /// Converts any val to boolean
@@ -350,22 +482,21 @@ abstract class Logical{
 ///   [bool] => [val]
 ///   tries: [val.isNotEmpty]
 ///   if has no getter isNotEmpty => true
-bool toBool(val){
-  if (val is bool){
+bool toBool(val) {
+  if (val is bool) {
     return val;
   }
-  if (val == null){
+  if (val == null) {
     return false;
   }
-  if (val is num){
+  if (val is num) {
     return val != 0;
   }
   // For strings|iterables
   // <editor-fold desc="Is not empty">
-  try{
+  try {
     return val.isNotEmpty;
-  }
-  on NoSuchMethodError{
+  } on NoSuchMethodError {
     // Pass
   }
   // </editor-fold>

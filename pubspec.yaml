@@ -1,13 +1,14 @@
 name: ari_utils
 description: Utility classes and functions I find myself using a lot. Specifically pythonic things.
 version: 0.0.2
-# homepage: https://github.com/SimpleTheory/ari_utils_dart
+#homepage: put pubdev link here
+repository: https://github.com/SimpleTheory/ari_utils_dart
 
 environment:
   sdk: '>=2.18.2 <3.0.0'
 
 dependencies:
-  path: ^1.8.3
+#  path: ^1.8.3
   collection: ^1.17.1
 
 dev_dependencies:

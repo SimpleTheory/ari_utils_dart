@@ -11,31 +11,27 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages). 
 -->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+This package is composed of functions I find myself writing and re-using all of the time in Dart.
+Coming from a pythonic background a lot of these functions are inspired from python, but there are
+several different other utilities I use all the time. 
 
+All of these functions are in pure dart and don't use any sub dependencies, so unless the language
+itself changes you can be sure that using this package as dependency will be fine, and that it is
+compatible on all platforms.
 
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+paste this in pubspec.yaml: 
 
-## Usage
+    ```ari_utils_dart: ^{version number}```
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+import string:
 
 ```dart
-const like = 'sample';
+import 'package:ari_utils_dart/ari_utils_dart.dart';
 ```
 
 ## Additional information
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+Feel free to comment and contribute at https://github.com/SimpleTheory/ari_utils_dart
