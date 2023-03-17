@@ -10,12 +10,13 @@ For general information about developing packages, see the Dart guide for
 and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages). 
 -->
+# Ari Utils
 
 This package is composed of functions I find myself writing and re-using all of the time in Dart.
 Coming from a pythonic background a lot of these functions are inspired from python, but there are
 several different other utilities I use all the time. 
 
-All of these functions are in pure dart and don't use any sub dependencies, so unless the language
+All of these functions are in pure dart and don't use any sub dependencies (except collections), so unless the language
 itself changes you can be sure that using this package as dependency will be fine, and that it is
 compatible on all platforms.
 
@@ -24,7 +25,9 @@ compatible on all platforms.
 
 paste this in pubspec.yaml: 
 
-    ```ari_utils_dart: ^{version number}```
+```
+ari_utils_dart: ^{version number}
+```
 
 import string:
 
