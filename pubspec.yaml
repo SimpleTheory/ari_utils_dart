@@ -3,6 +3,7 @@ description: Utility classes and functions I find myself using a lot. Specifical
 version: 0.0.2
 #homepage: put pubdev link here
 repository: https://github.com/SimpleTheory/ari_utils_dart
+documentation: https://simpletheory.github.io/ari_utils_dart/
 
 environment:
   sdk: '>=2.18.2 <3.0.0'

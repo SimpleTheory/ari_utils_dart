@@ -210,9 +210,9 @@ class Zip<I1, I2> extends DelegatingList<ZipItem<I1, I2>> {
   ///The list must have an even length or you will encounter an [ArgumentError]
   ///ex:
   /// [1,2,3,4,5,6] -->
-      /// 1,2
-      /// 3,4
-      /// 5,6
+  /// 1,2
+  /// 3,4
+  /// 5,6
   factory Zip.fromEvenListParity(List list){
     if (list.length % 2 != 0) {
       throw ArgumentError('List must be even current at ${list.length}');
@@ -426,9 +426,9 @@ Iterable<EnumListItem<T>> enumerateList<T>(List<T> list) sync* {
   }
 }
 
-Iterable<List<T>> iterateOverListPairs<T>(List<T> list) sync*{
-
-}
+// Iterable<List<T>> iterateOverListPairs<T>(List<T> list) sync*{
+//
+// }
 
 ///Class to hold index and value of a list specifically with [enumerateList].
 class EnumListItem<T> {
@@ -480,7 +480,7 @@ abstract class Logical {
 ///   [int] != 0
 ///   null => false
 ///   [bool] => [val]
-///   tries: [val.isNotEmpty]
+///   tries: val.isNotEmpty
 ///   if has no getter isNotEmpty => true
 bool toBool(val) {
   if (val is bool) {

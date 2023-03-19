@@ -14,7 +14,7 @@ and the Flutter guide for
 
 This package is composed of functions I find myself writing and re-using all of the time in Dart.
 Coming from a pythonic background a lot of these functions are inspired from python, but there are
-several different other utilities I use all the time. 
+several different other utilities I use all the time as well. 
 
 All of these functions are in pure dart and don't use any sub dependencies (except collections), so unless the language
 itself changes you can be sure that using this package as dependency will be fine, and that it is
@@ -36,5 +36,6 @@ import 'package:ari_utils_dart/ari_utils_dart.dart';
 ```
 
 ## Additional information
+The documentation is available at https://simpletheory.github.io/ari_utils_dart/
 
 Feel free to comment and contribute at https://github.com/SimpleTheory/ari_utils_dart
