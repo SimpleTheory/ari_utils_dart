@@ -75,10 +75,7 @@ ex:
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">&#47;&#47;&#47; 1,2
-    &#47;&#47;&#47; 3,4
-    &#47;&#47;&#47; 5,6
-factory Zip.fromEvenListParity(List list){
+  <pre class="language-dart"><code class="language-dart">factory Zip.fromEvenListParity(List list){
   if (list.length % 2 != 0) {
     throw ArgumentError(&#39;List must be even current at ${list.length}&#39;);
   }
