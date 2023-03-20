@@ -140,6 +140,12 @@ void main() {
 
       expect((list.slice().equals([0,1,2,3,4])), true);
     });
+    test('example', (){
+      expect([0,1,2,3,4,5,6].slice(stop: 4).equals([0,1,2,3]), true);
+    });
+    test('', (){
+
+    });
     test('', (){
 
     });

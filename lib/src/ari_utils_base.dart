@@ -21,7 +21,9 @@ extension PythonicListMethods<E> on List<E> {
   ///given range. START INCLUSIVE | END EXCLUSIVE. By default start=0, stop=list.length, step=1. Invalid inputs
   ///are met with ArgumentErrors.
   ///ex:
-  ///[1,2,3,5,6].slice(4) => 1 2 3
+  ///```
+  ///[0,1,2,3,4,5,6].slice(stop: 4) => [0,1,2,3]
+  ///```
   List<E> slice({int? stop, int start = 0, int step = 1}) {
     //Defaults
     stop ??= length; //TODO FIX NEG SLICE DEFAULT
@@ -52,8 +54,8 @@ extension PythonicListMethods<E> on List<E> {
   ///Returns a list of two sub-lists based off self:
   /// List 1: All items before specified index
   /// List 2: All items after specified index
-  /// Negative [-1] is the same as the last list item and all negative numbers are likewise
-  /// 0 leads to [[],[this]]
+  /// Negative `[-1]` is the same as the last list item and all negative numbers are likewise
+  /// 0 leads to `[[],[this]]`
   /// whereas an index>this.length leads to [[this],[]]
   List<List<E>> splitBeforeIndex(int index) {
     while (index < 0) {
@@ -70,8 +72,8 @@ extension PythonicListMethods<E> on List<E> {
     return newList;
   }
 
-  ///Similar to negative index in python [-1] will return the last thing in the list
-  ///0 or over will return its [] operator
+  ///Similar to negative index in python `[-1]` will return the last thing in the list
+  ///0 or over will return its `[]` operator
   E negativeIndex(int index) {
     while (index < 0) {
       index += length;
@@ -210,10 +212,12 @@ class Zip<I1, I2> extends DelegatingList<ZipItem<I1, I2>> {
   ///Creates a Zip by pairing an even index with its next odd index
   ///The list must have an even length or you will encounter an [ArgumentError]
   ///ex:
+  ///```
   /// [1,2,3,4,5,6] -->
   /// 1,2
   /// 3,4
   /// 5,6
+  /// ```
   factory Zip.fromEvenListParity(List list){
     if (list.length % 2 != 0) {
       throw ArgumentError('List must be even current at ${list.length}');
@@ -236,7 +240,9 @@ class Zip<I1, I2> extends DelegatingList<ZipItem<I1, I2>> {
   ///half of the list.
   ///The list must have an even length or you will encounter an [ArgumentError]
   ///ex:
+  /// ```
   /// [1,2,3,4,5,6] -->
+  /// ```
     /// 1,4
     /// 2,5
     /// 3,6
@@ -332,8 +338,8 @@ class ZipItem<I1, I2> {
 
   ZipItem(this.item1, this.item2);
 
-  ///[0] retrieves first item [1] retrieves 2nd, negative numbers retrieve
-  /// [0] if even or [1] if odd
+  ///`[0]` retrieves first item `[1]` retrieves 2nd, negative numbers retrieve
+  /// `[0]` if even or `[1]` if odd
   operator [](int index) {
     if (index == 0) {
       return item1;
