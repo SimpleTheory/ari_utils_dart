@@ -22,10 +22,11 @@ extension PythonicListMethods<E> on List<E> {
   ///are met with ArgumentErrors.
   ///ex:
   ///[1,2,3,5,6].slice(4) => 1 2 3
-  List<E> slice(int? stop, {int start = 0, int step = 1}) {
+  List<E> slice({int? stop, int start = 0, int step = 1}) {
     //Defaults
-    stop ??= length;
-
+    stop ??= length; //TODO FIX NEG SLICE DEFAULT
+    List<E> iterationList = step.isPositive ? List<E>.from(this) : reversed.toList();
+    if (step.isNegative){step *= -1;}
     //Clean Up Index (Negative and invalid start/stops)
     while (start < 0) {
       start += length;
@@ -38,12 +39,12 @@ extension PythonicListMethods<E> on List<E> {
           'Either stop $stop or start $start is greater than the '
           'length of this list $this | length: $length');
     }
-    if (start == 0){return <E>[];}
+    if (stop == 0){return <E>[];}
 
     //Create new list and add things from range into the list
     List<E> newList = [];
     for (int i in range(stop, start: start, step: step)) {
-      newList.add(this[i]);
+      newList.add(iterationList[i]);
     }
     return newList;
   }

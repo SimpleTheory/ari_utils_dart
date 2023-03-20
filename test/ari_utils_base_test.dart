@@ -74,13 +74,11 @@ void main() {
 
     });
     test('==', (){
-      print(ZipItem([1,2,3], ['a','b','c']) == ZipItem([1,2,3], ['a','b','c']));
       expect(ZipItem('a', 1), ZipItem('a', 1));
       expect(ZipItem([1,2,3], ['a','b','c']), equals(ZipItem([1,2,3], ['a','b','c'])));
 
     });
     test('== falsey', (){
-      print(ZipItem([1,2,1], ['a','b','c']) == ZipItem([1,2,3], ['a','b','c']));
       expect(ZipItem('a', 2) == ZipItem('a', 1), isFalse);
       expect(ZipItem([1,3], ['a','b','c']) == ZipItem([1,2,3], ['a','b','c']), isFalse);
 
@@ -126,5 +124,25 @@ void main() {
     test('', (){
 
     });
+  });
+  group('Slice', (){
+    List list = [0,1,2,3,4];
+    test('end+', (){
+      expect((list.slice(stop: 2).equals([0,1])), true);
+    });
+    test('end-', (){
+      expect((list.slice(stop: -1).equals([0,1,2,3])), true);
+    });
+    test('negative step', (){
+      expect((list.slice(step: -1).equals([0,1,2,3,4].reversed.toList())), true);
+    });
+    test('copy', (){
+
+      expect((list.slice().equals([0,1,2,3,4])), true);
+    });
+    test('', (){
+
+    });
+
   });
 }
