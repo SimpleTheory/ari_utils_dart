@@ -1,6 +1,6 @@
 name: ari_utils
 description: Utility classes and functions I find myself using a lot. Specifically pythonic things.
-version: 0.0.2
+version: 0.0.3
 #homepage: put pubdev link here
 repository: https://github.com/SimpleTheory/ari_utils_dart
 documentation: https://simpletheory.github.io/ari_utils_dart/
