@@ -9,3 +9,7 @@
 ### 0.0.3
 
 - Downgraded collections for it to work with the current version of flutter
+
+### 0.0.4
+
+- Added functions: flatten, roundDecimal, combineListValuesToMap
