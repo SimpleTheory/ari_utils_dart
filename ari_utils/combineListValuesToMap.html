@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the combineListValuesToMap function from the ari_utils library, for the Dart programming language.">
+  <title>combineListValuesToMap function - ari_utils library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">ari_utils</a></li>
+    <li><a href="../ari_utils/ari_utils-library.html">ari_utils</a></li>
+    <li class="self-crumb">combineListValuesToMap&lt;<wbr><span class="type-parameter">E</span>, <span class="type-parameter">T1</span>, <span class="type-parameter">T2</span>&gt; function</li>
+  </ol>
+  <div class="self-name">combineListValuesToMap</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span class="material-symbols-outlined">
+        brightness_4
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-function">combineListValuesToMap&lt;<wbr><span class="type-parameter">E</span>, <span class="type-parameter">T1</span>, <span class="type-parameter">T2</span>&gt;</span> function 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+ 
+</h1></div>
+
+    <section class="multi-line-signature">
+        
+
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter">T1</span>, <span class="type-parameter">T2</span>&gt;</span></span>
+<span class="name ">combineListValuesToMap</span>&lt;<wbr><span class="type-parameter">E</span>, <span class="type-parameter">T1</span>, <span class="type-parameter">T2</span>&gt;(<wbr><ol class="parameter-list"><li><span class="parameter" id="combineListValuesToMap-param-list"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter">E</span>&gt;</span></span> <span class="parameter-name">list</span>, </span></li>
+<li><span class="parameter" id="combineListValuesToMap-param-keyizer"><span class="type-annotation">T1</span> <span class="parameter-name">keyizer</span>(<ol class="parameter-list"><li><span class="parameter" id="param-elemToKey"><span class="type-annotation">E</span> <span class="parameter-name">elemToKey</span></span></li>
+</ol>
+), </span></li>
+<li><span class="parameter" id="combineListValuesToMap-param-valueizer"><span class="type-annotation">T2</span> <span class="parameter-name">valueizer</span>(<ol class="parameter-list"><li><span class="parameter" id="param-elemToValue"><span class="type-annotation">E</span> <span class="parameter-name">elemToValue</span></span></li>
+</ol>
+), </span></li>
+<li><span class="parameter" id="combineListValuesToMap-param-combinator"><span class="type-annotation">T2</span> <span class="parameter-name">combinator</span>(<ol class="parameter-list"><li><span class="parameter" id="param-existingSameKeyValue"><span class="type-annotation">T2</span> <span class="parameter-name">existingSameKeyValue</span>, </span></li>
+<li><span class="parameter" id="param-newSameKeyValue"><span class="type-annotation">T2</span> <span class="parameter-name">newSameKeyValue</span></span></li>
+</ol>
+)</span></li>
+</ol>)
+
+        
+
+    </section>
+    
+<section class="desc markdown">
+  <p>List: List to combine elements of
+Keyizer: Function to get key from an element of the list.</p>
+<p>Valueizer: Function to get map's value from an element of a list relative
+its key from keyizer.</p>
+<p>Combinator: Function to combine derived values of two list elements whose
+keyizer function returned the same key.</p>
+<p>Example use case</p>
+<pre class="language-dart"><code class="language-dart">class Wallet{
+  owner string;
+  value int;
+  Wallet(this.owner, this.string)
+}
+
+List&lt;Wallet&gt; wallets = [
+  Wallet('A', 1),
+  Wallet('A', 1),
+  Wallet('A', 1),
+  Wallet('B', 1),
+  Wallet('B', 1),
+  Wallet('B', 1)
+  ];
+
+// Generics wont show in code example but are (in order): Wallet, String, int
+
+combineListValuesToMap&lt;Wallet, String, int&gt;(
+  wallets,
+  (Wallet elemToKey) =&gt; elemToKey.owner,
+  (Wallet elemToValue) =&gt; elemToValue.value,
+  (int existingSameKeyValue, int newSameKeyValue) =&gt; existingSameKeyValue + newSameKeyValue
+)
+// The above Returns {'A': 3, 'B': 3}
+</code></pre>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Map&lt;T1, T2&gt; combineListValuesToMap&lt;E, T1, T2&gt;
+    (List&lt;E&gt; list,
+    T1 Function(E elemToKey) keyizer,
+    T2 Function(E elemToValue) valueizer,
+    T2 Function(T2 existingSameKeyValue, T2 newSameKeyValue) combinator){
+  Map&lt;T1, T2&gt; result = {};
+  for (E entry in list){
+    T1 key = keyizer(entry);
+    T2 value = valueizer(entry);
+    if (result[key] == null){
+      result[key] = value;
+    }
+    else{
+      result[key] = combinator(result[key] as T2, value);
+    }
+  }
+  return result;
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../index.html">ari_utils</a></li>
+  <li><a href="../ari_utils/ari_utils-library.html">ari_utils</a></li>
+  <li class="self-crumb">combineListValuesToMap&lt;<wbr><span class="type-parameter">E</span>, <span class="type-parameter">T1</span>, <span class="type-parameter">T2</span>&gt; function</li>
+</ol>
+
+
+    <h5>ari_utils library</h5>
+    <ol>
+      <li class="section-title"><a href="../ari_utils/ari_utils-library.html#classes">Classes</a></li>
+        <li><a href="../ari_utils/EnumListItem-class.html">EnumListItem</a></li>
+        <li><a href="../ari_utils/Logical-class.html">Logical</a></li>
+        <li><a href="../ari_utils/Zip-class.html">Zip</a></li>
+        <li><a href="../ari_utils/ZipItem-class.html">ZipItem</a></li>
+
+      <li class="section-title"><a href="../ari_utils/ari_utils-library.html#extensions">Extensions</a></li>
+        <li><a href="../ari_utils/MapUtils.html">MapUtils</a></li>
+        <li><a href="../ari_utils/NumIs.html">NumIs</a></li>
+        <li><a href="../ari_utils/PythonicListMethods.html">PythonicListMethods</a></li>
+        <li><a href="../ari_utils/StringIter.html">StringIter</a></li>
+
+
+
+
+      <li class="section-title"><a href="../ari_utils/ari_utils-library.html#functions">Functions</a></li>
+        <li><a href="../ari_utils/combineListValuesToMap.html">combineListValuesToMap</a></li>
+        <li><a href="../ari_utils/enumerateList.html">enumerateList</a></li>
+        <li><a href="../ari_utils/flatten.html">flatten</a></li>
+        <li><a href="../ari_utils/range.html">range</a></li>
+        <li><a href="../ari_utils/reverse.html">reverse</a></li>
+        <li><a href="../ari_utils/roundDecimal.html">roundDecimal</a></li>
+        <li><a href="../ari_utils/toBool.html">toBool</a></li>
+
+
+      <li class="section-title"><a href="../ari_utils/ari_utils-library.html#typedefs">Typedefs</a></li>
+        <li><a href="../ari_utils/BoolFunctionMap.html">BoolFunctionMap</a></li>
+
+</ol>
+
+  </div><!--/.sidebar-offcanvas-left-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    ari_utils
+      0.0.4
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+
