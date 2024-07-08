@@ -131,6 +131,13 @@ extension MapUtils<K, V> on Map<K, V> {
     }
     return newMap;
   }
+
+  ///Sorts the Map based on the given function and RETURNS the sorted map. (Doesn't sort in place!)
+  Map<K, V> sort(int Function(MapEntry<K, V>, MapEntry<K, V>) compare){
+    List<MapEntry<K, V>> mapAsList = entries.toList();
+    mapAsList.sort(compare);
+    return Map.fromEntries(mapAsList);
+  }
 }
 
 extension StringIter on String {
@@ -307,7 +314,7 @@ class Zip<I1, I2> extends DelegatingList<ZipItem<I1, I2>> {
       throw ArgumentError('List must be even current at ${list.length}');
     }
     List<ZipItem<I1, I2>> newBaseList = [];
-    for (EnumListItem enumItem in enumerateList(list)) {
+    for (EnumListItem enumItem in enumerate(list)) {
       if (enumItem.i + 1 > list.length) {
         break;
       } else if (enumItem.i % 2 == 1) {
@@ -507,11 +514,11 @@ class ZipItem<I1, I2> {
 //</editor-fold>
 }
 
-///Like python enumerate but with [EnumListItem] to iterate over a list with
+///Like python enumerate but with [EnumListItem] to iterate over an iterable with
 ///its index and value in a comfortable way.
-Iterable<EnumListItem<T>> enumerateList<T>(List<T> list) sync* {
+Iterable<EnumListItem<T>> enumerate<T>(Iterable<T> iterable) sync* {
   int i = 0;
-  for (T v in list) {
+  for (T v in iterable) {
     yield EnumListItem<T>(i, v);
     i++;
   }
@@ -521,7 +528,7 @@ Iterable<EnumListItem<T>> enumerateList<T>(List<T> list) sync* {
 //
 // }
 
-///Class to hold index and value of a list specifically with [enumerateList].
+///Class to hold index and value of a list specifically with [enumerate].
 class EnumListItem<T> {
   int index;
   T value;

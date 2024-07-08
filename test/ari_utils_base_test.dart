@@ -15,7 +15,7 @@ void main() {
     test('Pythonic List Enumeration', (){
       List<String> a = ['a','b','c'];
       List b = [];
-      for (EnumListItem<String> i in enumerateList(a)){
+      for (EnumListItem<String> i in enumerate(a)){
         b.add(i.i);
         b.add(i.v);
       }
