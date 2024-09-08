@@ -13,3 +13,7 @@
 ### 0.0.4
 
 - Added functions: flatten, roundDecimal, combineListValuesToMap
+
+### 0.0.5
+
+- Added functions: string iter, string title, some better type hinting as well

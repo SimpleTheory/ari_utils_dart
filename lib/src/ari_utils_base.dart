@@ -146,7 +146,7 @@ extension StringExt on String {
   /// Use to iterate over the individual characters
   /// of a String: `"Hello".iterate()` -> 'H' 'e' 'l' 'l' 'o'
   Iterable<String> iterate() sync* {
-    for (var i = 0; i < length; i++) {
+    for (int i = 0; i < length; i++) {
       yield this[i];
     }
   }
