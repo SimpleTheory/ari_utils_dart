@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:collection/collection.dart';
+import 'dart:collection';
+
 
 // Dependent typedefs
 typedef BoolFunctionMap = bool Function(MapEntry);
@@ -122,9 +124,9 @@ extension MapUtils<K, V> on Map<K, V> {
 
   ///Works like [List.where], you put in a function that takes a MapEntry and returns a bool.
   ///This will return new Map where the above function is true.
-  Map<K, V> where(BoolFunctionMap func) {
+  Map<K, V> where(bool Function(MapEntry<K, V> mapEntry) func) {
     Map<K, V> newMap = {};
-    for (MapEntry entry in entries) {
+    for (MapEntry<K, V> entry in entries) {
       if (func(entry)) {
         newMap[entry.key] = entry.value;
       }
@@ -136,17 +138,23 @@ extension MapUtils<K, V> on Map<K, V> {
   Map<K, V> sort(int Function(MapEntry<K, V>, MapEntry<K, V>) compare){
     List<MapEntry<K, V>> mapAsList = entries.toList();
     mapAsList.sort(compare);
-    return Map.fromEntries(mapAsList);
+    return LinkedHashMap.fromEntries(mapAsList);
   }
 }
 
-extension StringIter on String {
+extension StringExt on String {
   /// Use to iterate over the individual characters
   /// of a String: `"Hello".iterate()` -> 'H' 'e' 'l' 'l' 'o'
   Iterable<String> iterate() sync* {
     for (var i = 0; i < length; i++) {
       yield this[i];
     }
+  }
+  String title() {
+    return split(' ').map((word) {
+      if (word.isEmpty) return word;
+      return word[0].toUpperCase() + word.substring(1).toLowerCase();
+    }).join(' ');
   }
 }
 

@@ -5,6 +5,7 @@ import 'package:test/test.dart';
 ///   All range cases
 ///   Every method of Zip and its cases
 ///   List enumeration
+///   Map sort
 
 void main() {
   group('Misc', () {
@@ -39,6 +40,18 @@ void main() {
     });
     test('Pythonic range but stop < start so error', (){
 
+    });
+    test('String Iter', (){
+      final sample = 'hello';
+      final actual = sample.iterate().toList();
+      expect(actual.equals(['h','e','l','l','o']), true);
+
+    });
+    test('String Title', (){
+      final sample = 'hello i need to Title this';
+      final expected = 'Hello I Need To Title This';
+      final result = sample.title();
+      expect(result, expected);
     });
 
 
